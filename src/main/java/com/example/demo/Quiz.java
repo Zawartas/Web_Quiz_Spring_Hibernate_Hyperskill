@@ -32,6 +32,9 @@ public class Quiz {
     @OneToOne(cascade = CascadeType.ALL)
     private Answer answer = new Answer();
 
+    @ManyToOne @JoinColumn(name ="userId")
+    private User user;
+
     public String getText() {
         return text;
     }
@@ -50,6 +53,14 @@ public class Quiz {
 
     public long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setTitle(String title) {

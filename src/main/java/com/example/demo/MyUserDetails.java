@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public class MyUserDetails implements UserDetails {
 
@@ -15,10 +16,15 @@ public class MyUserDetails implements UserDetails {
         this.user = user;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-        return Arrays.asList(authority);
+//        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
+//        return Arrays.asList(authority);
+        return Collections.emptyList();
     }
 
     @Override
@@ -48,6 +54,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return true /*user.isEnabled()*/;
     }
 }

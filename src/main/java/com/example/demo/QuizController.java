@@ -3,16 +3,20 @@ package com.example.demo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class QuizController {
@@ -51,15 +55,27 @@ public class QuizController {
         return ResponseEntity.ok().body(objectMapper.writeValueAsString(quiz));
     }
 
-    @GetMapping(path = "/api/quizzes")
-    public ResponseEntity<String> getQuizzes() throws JsonProcessingException {
-        return ResponseEntity.ok().body(objectMapper.writeValueAsString(quizRepository.findAll()));
+    @GetMapping(path = "/api/quizzes", produces = "application/json")
+    public ResponseEntity<Page<Quiz>> getAllQuizzes(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize/*,
+            @RequestParam(defaultValue = "id") String sortBy*/) {
+
+        Pageable paging = PageRequest.of(page, pageSize);
+        Page<Quiz> pagedResult = quizRepository.findAll(paging);
+
+        System.out.println("this: " + pagedResult.toString());
+        return ResponseEntity.ok().body(pagedResult);
     }
 
     @PostMapping(path = "/api/quizzes", consumes = "application/json")
-    public ResponseEntity<String> addQuiz(@Valid @RequestBody Quiz quiz) throws JsonProcessingException {
+    public ResponseEntity<String> addQuiz(@Valid @RequestBody Quiz quiz,
+                                          @AuthenticationPrincipal MyUserDetails myUserDetails)
+            throws JsonProcessingException {
 
+        quiz.setUser(myUserDetails.getUser());
         quizRepository.save(quiz);
+
         return ResponseEntity.ok().body(objectMapper.writeValueAsString(quiz));
     }
 
@@ -78,6 +94,23 @@ public class QuizController {
 
         userRepository.save(user);
         return ResponseEntity.ok().body(objectMapper.writeValueAsString(user));
+    }
+
+    @DeleteMapping(path = "/api/quizzes/{quizId}")
+    public ResponseEntity<String> deleteQuiz(@PathVariable long quizId,
+                                             @AuthenticationPrincipal MyUserDetails myUserDetails)
+            throws ResourceNotFoundException {
+
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new ResourceNotFoundException("Quiz not found for this id: " + quizId));
+//        System.out.println(quiz.getUser() + "\n");
+//        System.out.println(myUserDetails.getUser());
+        if (quiz.getUser().getUserId() != myUserDetails.getUser().getUserId()) {
+            System.out.println("well we're here");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        quizRepository.delete(quiz);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping(path = "/actuator/shutdown")

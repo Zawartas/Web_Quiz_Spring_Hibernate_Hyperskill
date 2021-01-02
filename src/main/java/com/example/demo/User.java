@@ -1,24 +1,24 @@
 package com.example.demo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
-@Entity @Table(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "users_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "users_id")
     private long userId;
-    @NotNull @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-            +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message="Wrong email format.")
-    @JsonProperty("email")
-    private String username;
-    @Column(length = 60) @Size(min = 5) @NotNull
+    @NotNull
+    @Pattern(regexp="\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b")
+    private String email;
+    @Column(length = 60)
+    @Size(min = 5)
+    @NotNull
     private String password;
     private String role;
     private boolean enabled;
@@ -26,8 +26,8 @@ public class User {
     public User() {
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -38,6 +38,14 @@ public class User {
         this.password = password;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -46,20 +54,12 @@ public class User {
         return enabled;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public long getUserId() {
-        return userId;
     }
 
     public void setEnabled(boolean enabled) {
@@ -70,8 +70,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
+                ", username='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 ", enabled=" + enabled +
                 '}';

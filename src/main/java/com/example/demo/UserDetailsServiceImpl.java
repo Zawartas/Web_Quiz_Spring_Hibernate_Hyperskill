@@ -13,16 +13,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        System.out.println("Here???");
-        User user = userRepository.getUserByUsername(username);
-        System.out.println("Or Here???");
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findUserByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(email);
         }
-        System.out.println("FOUND!!!!");
-
         return new MyUserDetails(user);
     }
 }

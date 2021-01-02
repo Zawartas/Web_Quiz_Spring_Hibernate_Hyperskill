@@ -13,27 +13,26 @@ import java.util.List;
 @JsonSerialize(using = QuizJsonSerializer.class)
 public class Quiz {
 
-    public Quiz() {
-    }
-
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @NotBlank(message = "Title is mandatory")
     private String title;
-
     @NotBlank(message = "Text is mandatory")
     private String text;
-
-    @NotNull(message = "Options can't be null.") @Size(min = 2, message = "Need at least two options in a quiz.")
-    @ElementCollection @OrderColumn
+    @NotNull(message = "Options can't be null.")
+    @Size(min = 2, message = "Need at least two options in a quiz.")
+    @ElementCollection
+    @OrderColumn
     private String[] options;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Answer answer = new Answer();
-
-    @ManyToOne @JoinColumn(name ="userId")
+    @ManyToOne
+    @JoinColumn(name ="userId")
     private User user;
+
+    public Quiz() {
+    }
 
     public String getText() {
         return text;
@@ -78,9 +77,4 @@ public class Quiz {
     public void setAnswer(List<Integer> answer) {
         this.answer = new Answer(answer);
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
 }

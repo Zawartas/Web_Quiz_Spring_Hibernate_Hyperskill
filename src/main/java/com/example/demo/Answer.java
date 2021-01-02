@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import javax.persistence.*;
-import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +19,6 @@ public class Answer {
     }
 
     public Answer(List<Integer> answer) {
-        System.out.println("answers: ");
-        answer.forEach(integer -> System.out.print(integer + " "));
-        System.out.println();
         this.answer = answer;
     }
 

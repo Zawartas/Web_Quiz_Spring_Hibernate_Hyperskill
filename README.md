@@ -1,6 +1,7 @@
 # Web_Quiz_Spring_Hibernate_Hyperskill
+## Java, JPA, Hibernate, h2, Spring Boot, Spring Security, Spring Data
 
-## What this program does - is that it allows adding custom questions to a database.
+### What this program does - is that it allows adding custom questions to a database.
 
 We can add a user to a database with a given username (email to be exact) with a encrypted password.
 Questions need to have at least two options eg. A or B?

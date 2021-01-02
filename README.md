@@ -1,6 +1,6 @@
 # Web_Quiz_Spring_Hibernate_Hyperskill
 
-What this program does - is that it allows adding custom questions to a database.
+##What this program does - is that it allows adding custom questions to a database.
 
 We can add a user to a database with a given username (email to be exact) with a encrypted password.
 Questions need to have at least two options eg. A or B?
@@ -11,14 +11,14 @@ Users can answer questions and information about completion is also being stored
 Users can get information about all their completed questions.
 Getting information about all quizes or quizzes completed supports pagination.
 
-API consists of:
-/api/register - andds a user, email and password needed
+###API consists of:
+#####/api/register - andds a user, email and password needed
     {
       "email": "test@gmail.com",
       "password": "secret",
       "role": "user"
     }
-/api/quizzes - adds a quiz:
+#####/api/quizzes - adds a quiz:
     {
       "title": "Quiz 2",
       "text": "Quiz with two correct answers.",
@@ -32,11 +32,11 @@ API consists of:
       "options": ["Robot","Tea leaf","Cup of coffee","Bug"],
       "answer": []
     }
-/api/quizzes/{quizId} - gets quiz with a given id
-/api/quizzes/{quizId}/solve - sends answers for a quiz with given id
+#####/api/quizzes/{quizId} - gets quiz with a given id
+#####/api/quizzes/{quizId}/solve - sends answers for a quiz with given id
     {
       "answer": [1]
     }
-/api/quizzes/{quizId} - deletes quiz with given id
-/api/actuator/shutdown - shuts down application
-/api/quizzes/completed - gets all completed quizzes for a given user, sorted by last completed first
+#####/api/quizzes/{quizId} - deletes quiz with given id
+#####/api/actuator/shutdown - shuts down application
+#####/api/quizzes/completed - gets all completed quizzes for a given user, sorted by last completed first
